@@ -4,10 +4,12 @@ logging.basicConfig()
 logger = logging.getLogger('YNAB_Sync')
 
 if getattr(sys, 'frozen', False):
+    wd = sys._MEIPASS
     dname = os.path.dirname(sys.executable)
 elif __file__:
+    wd = os.getcwd()
     dname = os.path.dirname(__file__)
-os.chdir(dname)
+os.chdir(wd)
 print(os.getcwd())
 
 cli = False
