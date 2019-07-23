@@ -1,6 +1,8 @@
 # YNAB Sync
 Applikasjon for å synke transaksjoner fra SBanken til YNAB.
 
+[Last ned her](https://github.com/hanfil/YNAB_Sync-Norge/releases)
+
 ![App](https://raw.githubusercontent.com/hanfil/YNAB_Sync-Norge/master/doc/app_info.png)
 
 Betalingsmottaker (payee) og kategori må settes manuelt i etterkant, og transaksjonen må verifieseres i YNAB-appen eller på app.ynab.com. 
@@ -19,7 +21,7 @@ Etter at avtalen er inngått, har man muligheten til å opprette autentiseringst
 
 Her skal du først opprette en applikasjon, og så generere en token.
 Applikasjonen trenger visse lese rettigheter for å hente ut transaksjoner.
-IKKE huk av på "Grants full access to the eFakturas service." og "Grants full access to the transfers service." Så slipper du at andre kan misbruke banken din._
+_IKKE huk av på "Grants full access to the eFakturas service." og "Grants full access to the transfers service." Så slipper du at andre kan misbruke banken din._
 
 ![Sbanken_apitoken](https://gitlab.com/ljantzen/moneyplan/raw/master/docs/images/sbanken-apitoken.png)
 
