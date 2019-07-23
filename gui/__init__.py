@@ -4,6 +4,7 @@ from PyQt5.QtCore import QDate
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QMessageBox, QMainWindow, QApplication, QWidget, QPushButton, QAction, QLabel, QTabWidget, QVBoxLayout, QStackedWidget, QFileDialog
 
+from functions import sbanken
 from functions import ynab
 from functions import sync
 
