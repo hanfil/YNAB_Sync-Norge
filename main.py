@@ -3,6 +3,13 @@ import sys, logging
 logging.basicConfig()
 logger = logging.getLogger('YNAB_Sync')
 
+if getattr(sys, 'frozen', False):
+    dname = os.path.dirname(sys.executable)
+elif __file__:
+    dname = os.path.dirname(__file__)
+os.chdir(dname)
+print(os.getcwd())
+
 cli = False
 cron = False
 debug = False

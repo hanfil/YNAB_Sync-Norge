@@ -10,6 +10,7 @@ requests = "*"
 oauthlib = "*"
 requests-oauthlib = "*"
 pyqt5 = "*"
+pyinstaller = "*"
 
 [requires]
 python_version = "3.7"

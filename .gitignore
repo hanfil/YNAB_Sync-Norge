@@ -3,3 +3,5 @@ __pycache__
 *.YNAB.json
 .DS_Store
 .idea
+dist
+build

@@ -3,7 +3,10 @@ from PyQt5 import uic
 from PyQt5.QtCore import QDate
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QMessageBox, QMainWindow, QApplication, QWidget, QPushButton, QAction, QLabel, QTabWidget, QVBoxLayout, QStackedWidget, QFileDialog
-from functions import *
+
+from functions import ynab
+from functions import sync
+
 
 # Subclass QMainWindow to customise your application's main window
 class App(QMainWindow):
@@ -20,7 +23,7 @@ class App(QMainWindow):
         self.startupProcess()
 
     def initUI(self):
-        uic.loadUi('gui/content/mainwindow.ui', self)
+        uic.loadUi('./gui/content/mainwindow.ui', self)
 
         self.settingsNew_import.clicked.connect(self.import_settingsfile)
         self.settings_ynab_token.returnPressed.connect(self.get_ynabbudgets)
