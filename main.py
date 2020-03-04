@@ -4,7 +4,7 @@ logging.basicConfig()
 logger = logging.getLogger('YNAB_Sync')
 
 if getattr(sys, 'frozen', False):
-    wd = sys._MEIPASS
+    #wd = sys._MEIPASS
     dname = os.path.dirname(sys.executable)
 elif __file__:
     wd = os.getcwd()
@@ -23,7 +23,6 @@ def cli_arguments():
     for i in range(len(sys.argv)):
         if skip_one:
             skip_one = False
-            continue
         elif sys.argv[i] == '?' or sys.argv[i] == '--help':
             print("[EXAMPLE]\n"
                   "%s [filename] --cli --cron --debug" % __file__ + "\n\n"

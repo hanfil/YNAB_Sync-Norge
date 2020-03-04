@@ -134,8 +134,8 @@ class App(QMainWindow):
             except: pass
 
     def startupProcess(self):
-        for settingsFile in self.settings_files:
-            with open(settingsFile) as json_file:
+        for settingsfile in self.settings_files:
+            with open(settingsfile) as json_file:
                 settings = json.load(json_file)
             self.settings_json.append(settings)
             self.newThread(settings)
@@ -198,9 +198,9 @@ class App(QMainWindow):
             self.settings_accountlink.removeTab(0)
         # Loading settings from file
         fname = QFileDialog.getOpenFileName(self, 'Open file', os.getcwd(), "json files (*.YNAB.json *.json)")
-        settingsFile = fname[0]
-        if settingsFile:
-            with open(settingsFile) as json_file:
+        settingsfile = fname[0]
+        if settingsfile:
+            with open(settingsfile) as json_file:
                 settings = json.load(json_file)
             self.settings_name.setText(settings['name'])
             self.settings_sbanken_customerid.setText(settings['sbanken_customerid'])
@@ -222,10 +222,10 @@ class App(QMainWindow):
         msg.setText('Ikke del filen med andre! \nFilen får innhold av sensitiv opplysninger og rettigheter.')
         msg.exec_()
         fname = QFileDialog.getSaveFileName(self, 'Save file', os.getcwd(), "json files (*.YNAB.json *.json)")
-        settingsFile = fname[0]
-        if settingsFile:
+        settingsfile = fname[0]
+        if settingsfile:
             settings = self.settings_pane2settings_json(settings_pane)
-            with open(settingsFile, 'w') as json_file:
+            with open(settingsfile, 'w') as json_file:
                 json.dump(settings, json_file, indent=4)
 
     def get_ynabbudgets(self, *argv):
