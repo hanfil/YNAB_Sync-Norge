@@ -13,4 +13,4 @@ pyqt5 = "==5.12.2"
 pyinstaller = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
