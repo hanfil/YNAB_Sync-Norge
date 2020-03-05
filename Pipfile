@@ -10,7 +10,7 @@ pylint = "*"
 requests = "*"
 oauthlib = "*"
 requests-oauthlib = "*"
-pyqt5 = "==5.12.2"
+pyqt5 = "*"
 pyinstaller = "*"
 
 [requires]

@@ -77,6 +77,7 @@ class API:
         self.requestCounter += 1
 
     def get_transactions(self, accountId, date=None, forceUpdate=False):
+        logger.debug('->Function: get_transaction(accountId: %s, date: %s, forceUpdate: %s)' % (accountId, date, forceUpdate))
         # The date should be ISO formatted string (e.g. 2016-12-30)
         if self.transaction_timestamp.get(accountId) == None or forceUpdate == True:
             self.transaction_timestamp[accountId] = datetime.datetime.now()-datetime.timedelta(minutes=1)
@@ -97,7 +98,10 @@ class API:
                             params={'since_date': date})
             transactions = r.json()['data']['transactions']
             self.transactions[accountId] = transactions
-
+        else:
+            self.transactions[accountId] = []
+        logger.debug('self.transactions:: %s', self.transactions)
+        logger.debug('->Function: get_transaction - return=%s' % (self.transactions[accountId]))
         return self.transactions[accountId]
 
     def find_transaction(self, accountId, amount, date, clearIfFound=False, daysBack=0):

@@ -4,7 +4,7 @@ logging.basicConfig()
 logger = logging.getLogger('YNAB_Sync')
 
 if getattr(sys, 'frozen', False):
-    #wd = sys._MEIPASS
+    wd = sys._MEIPASS
     dname = os.path.dirname(sys.executable)
 elif __file__:
     wd = os.getcwd()
@@ -41,15 +41,14 @@ def cli_arguments():
         else:
             settings_files.append(sys.argv[i])
 
-
 def main():
     cli_arguments()
     global cli, cron, debug, settings_files
-
     if debug:
         logger.setLevel(logging.DEBUG)
     else:
         logger.setLevel(logging.INFO)
+    logger.info(str(logger.getEffectiveLevel))
 
     if cli:
         from functions import cli
