@@ -1,6 +1,7 @@
 
 __pycache__
 *.YNAB.json
+*.log
 .DS_Store
 .idea
 .vscode

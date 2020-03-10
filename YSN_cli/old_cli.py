@@ -6,7 +6,7 @@ import requests
 import threading
 import logging
 logger = logging.getLogger('YNAB_Sync')
-from functions import *
+from YSN_base import *
 
 def create_check_settingsFile(settingsFile):
     try:
@@ -170,6 +170,3 @@ def main(settings_files=None, cron=False):
             process = thread_objects[int(user_input)]
             processEditor(process)
 
-
-if __name__ == '__main__':
-    main()

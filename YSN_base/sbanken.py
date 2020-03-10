@@ -2,7 +2,7 @@ import requests, datetime, logging
 from oauthlib.oauth2 import BackendApplicationClient
 from requests_oauthlib import OAuth2Session
 import urllib.parse
-from functions import ynab
+from YSN_base import ynab
 
 logger = logging.getLogger('YNAB_Sync')
 

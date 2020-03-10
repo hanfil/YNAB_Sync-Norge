@@ -1,7 +1,15 @@
 import os
-import sys, logging
-logging.basicConfig()
+import sys
+import argparse
+import logging
+
+
+logging.basicConfig(filename='YNAB_Sync-Norge.log',
+                    format='%(asctime)s %(message)s',
+                    filemode='w')
 logger = logging.getLogger('YNAB_Sync')
+logger.setLevel(logging.INFO)
+
 
 if getattr(sys, 'frozen', False):
     wd = sys._MEIPASS
@@ -10,15 +18,25 @@ elif __file__:
     wd = os.getcwd()
     dname = os.path.dirname(__file__)
 os.chdir(wd)
-print(os.getcwd())
+logger.info("Initializing | Setting working directory: '%s' " % os.getcwd())
 
-cli = False
+
+""" cli = False
 cron = False
 debug = False
-settings_files = []
+settings_files = [] """
 
-def cli_arguments():
+parser = argparse.ArgumentParser(description="YNAB_Sync-Norge")
+parser.add_argument("--settings_files", nargs='+', help="Settings files to load config into program.", default=[])
+parser.add_argument("--cli", help="Start the program only in commandline. If not specified defaults to gui.", action='store_true')
+parser.add_argument("--cron", help="Usable only with cli. Runs the program only once. Need a settings file.", action='store_true')
+parser.add_argument("--debug", help="Prints out debug messages.", action='store_true')
+args = parser.parse_args()
+print(args)
+
+""" def cli_arguments():
     global cli, cron, debug, settings_files
+
     skip_one = True
     for i in range(len(sys.argv)):
         if skip_one:
@@ -41,21 +59,24 @@ def cli_arguments():
         else:
             settings_files.append(sys.argv[i])
 
+ """
+
 def main():
-    cli_arguments()
-    global cli, cron, debug, settings_files
-    if debug:
+    #cli_arguments()
+    #global cli, cron, debug, settings_files
+
+    if args.debug:
         logger.setLevel(logging.DEBUG)
     else:
         logger.setLevel(logging.INFO)
     logger.info(str(logger.getEffectiveLevel))
 
-    if cli:
-        from functions import cli
-        cli.main(settings_files, cron)
+    if args.cli:
+        import YSN_cli
+        YSN_cli.CLI(args.settings_files, args.cron)
     else:
-        import gui
-        gui.main(settings_files)
+        import YSN_gui
+        YSN_gui.main(args.settings_files)
 
 
 if __name__ == '__main__':
