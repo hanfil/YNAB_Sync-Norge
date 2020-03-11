@@ -5,7 +5,7 @@ import logging
 
 
 logging.basicConfig(filename='YNAB_Sync-Norge.log',
-                    format='%(asctime)s %(message)s',
+                    format='%(asctime)s <%(levelname)s>:%(message)s',
                     filemode='w')
 logger = logging.getLogger('YNAB_Sync')
 logger.setLevel(logging.INFO)

@@ -13,12 +13,12 @@ class API:
         self.transactions = {}
         self.accounts = []
         self.payees = []
-        self.credential_checkResult = False
+        self.credential_check_result = False
         self.api_url = "https://api.youneedabudget.com/v1/"
         r = requests.get(url=self.api_url+"budgets", headers={'Authorization': 'Bearer '+ynab_token})
         self.update_requestsCounter()
         if r.status_code == 200:
-            self.credential_checkResult = True
+            self.credential_check_result = True
             self.token = ynab_token
         else:
             self.status_text = r.json()
@@ -31,7 +31,7 @@ class API:
         return r.json()['data']['budgets']
 
     def choose_budget(self,budgetId=None):
-        if self.credential_checkResult == False:
+        if self.credential_check_result == False:
             return "Check credentials!"
 
         if budgetId != None:
@@ -57,7 +57,7 @@ class API:
         return payees
 
     def list_accounts(self):
-        if self.credential_checkResult == False:
+        if self.credential_check_result == False:
             return "Check credentials!"
         if self.budgetId == None:
             self.choose_budget()
@@ -91,7 +91,7 @@ class API:
                 self.transaction_timestamp[accountId] = datetime.datetime.now()-datetime.timedelta(minutes=1)
         if self.transaction_timestamp[accountId] < datetime.datetime.now()-datetime.timedelta(minutes=1):
             self.transaction_timestamp[accountId] = datetime.datetime.now()
-            logger.info('Fetching transaction | since_date : '+date)
+            logger.info('Fetching transaction | since_date : %s' % date)
             self.update_requestsCounter()
             r = requests.get(url=self.api_url+"accounts/"+accountId+"/transactions",
                             headers={'Authorization': 'Bearer '+self.token},
