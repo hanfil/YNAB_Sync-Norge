@@ -3,11 +3,12 @@ import json
 import datetime
 import logging
 
-logger = logging.getLogger('YNAB_Sync')
-
 
 class API:
+    logger = logging.getLogger('YNAB_Sync')
+
     def __init__(self,ynab_token):
+        self.logger.debug('YSN_base >ynab | Initializing')
         # limit is 200 requests per hour
         self.transaction_timestamp = {}
         self.transactions = {}
@@ -15,30 +16,35 @@ class API:
         self.payees = []
         self.credential_check_result = False
         self.api_url = "https://api.youneedabudget.com/v1/"
+        self.logger.debug('YSN_base >ynab | Initializing :: api_url:"%s"' % self.api_url)
         r = requests.get(url=self.api_url+"budgets", headers={'Authorization': 'Bearer '+ynab_token})
         self.update_requestsCounter()
         if r.status_code == 200:
             self.credential_check_result = True
             self.token = ynab_token
+            self.logger.debug('YSN_base >ynab | Initializing :: credential_cech_result=True - Token=%s' % self.token)
         else:
             self.status_text = r.json()
-            logger.error(r.json())
-            #raise RuntimeError("YNAB || {} : {}".format(r.json()["error"]['name'], r.json()["error"]['detail']))
+            self.logger.error(r.json())
 
     def get_budget(self):
+        self.logger.debug('YSN_base >ynab->get_budget | Fetching list of budget names')
         self.update_requestsCounter()
         r = requests.get(url=self.api_url + "budgets", headers={'Authorization': 'Bearer ' + self.token})
         return r.json()['data']['budgets']
 
-    def choose_budget(self,budgetId=None):
+    def choose_budget(self, budgetId=None):
         if self.credential_check_result == False:
+            self.logger.warning('YSN_base >ynab->choose_budget | Called upon after failing credential check.')
             return "Check credentials!"
 
+        self.logger.debug('YSN_base >ynab->choose_budget | budgetId=%s' % budgetId)
         if budgetId != None:
             self.budgetId = budgetId
             self.api_url += "budgets/"+self.budgetId+"/"
         else:
             budgets = self.get_budget()
+            self.logger.debug('YSN_base >ynab->choose_budget | budgets=%s' % budgets)
             for i in range(len(budgets)):
                 print(str(i)+': '+ budgets[i]['name'])
             budget_nr = int(input('Choose a number: '))
@@ -46,18 +52,23 @@ class API:
                 budget_nr = int(input('Choose a number listed: '))
             print('"'+budgets[budget_nr]['name']+'" Selected\n')
             self.budgetId = budgets[budget_nr]['id']
+            self.logger.debug('YSN_base >ynab->choose_budget | Budget Id selected : %s' % self.budgetId)
             self.api_url += "budgets/"+self.budgetId+"/"
+            self.logger.debug('YSN_base >ynab->choose_budget | api_url : %s' % self.api_url)
             return {'id': budgets[budget_nr]['id'], 'name': budgets[budget_nr]['name']}
 
     def get_payees(self):
+        self.logger.debug('YSN_base >ynab->get_payees | Fetching list of payees.')
         self.update_requestsCounter()
         r = requests.get(url=self.api_url + "/payees", headers={'Authorization': 'Bearer ' + self.token})
         payees = r.json()['data']['payees']
         self.payees = payees
+        self.logger.debug('YSN_base >ynab->get_payees | Payees: %s' % self.payees)
         return payees
 
     def list_accounts(self):
         if self.credential_check_result == False:
+            self.logger.warning('YSN_base >ynab->list_accounts | Called upon after failing credential check.')
             return "Check credentials!"
         if self.budgetId == None:
             self.choose_budget()
@@ -77,7 +88,7 @@ class API:
         self.requestCounter += 1
 
     def get_transactions(self, accountId, date=None, forceUpdate=False):
-        logger.debug('->Function: get_transaction(accountId: %s, date: %s, forceUpdate: %s)' % (accountId, date, forceUpdate))
+        self.logger.debug('YSN_base >ynab->get_transactions (accountId: %s, date: %s, forceUpdate: %s)' % (accountId, date, forceUpdate))
         # The date should be ISO formatted string (e.g. 2016-12-30)
         if self.transaction_timestamp.get(accountId) == None or forceUpdate == True:
             self.transaction_timestamp[accountId] = datetime.datetime.now()-datetime.timedelta(minutes=1)

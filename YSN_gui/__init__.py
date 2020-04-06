@@ -4,10 +4,7 @@ from PyQt5.QtCore import QDate
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QMessageBox, QMainWindow, QApplication, QWidget, QPushButton, QAction, QLabel, QTabWidget, QVBoxLayout, QStackedWidget, QFileDialog
 
-from functions import sbanken
-from functions import ynab
-from functions import sync
-
+from YSN_base import sbanken, ynab, sync
 
 # Subclass QMainWindow to customise your application's main window
 class App(QMainWindow):
@@ -24,7 +21,7 @@ class App(QMainWindow):
         self.startupProcess()
 
     def initUI(self):
-        uic.loadUi('./gui/content/mainwindow.ui', self)
+        uic.loadUi('YSN_gui/content/mainwindow.ui', self)
 
         self.settingsNew_import.clicked.connect(self.import_settingsfile)
         self.settings_ynab_token.returnPressed.connect(self.get_ynabbudgets)
@@ -41,14 +38,14 @@ class App(QMainWindow):
     def showProcessWidgets(self, process):
         # Check if widget already exist
         if self.info_stack.count() == 0:
-            process_pane = uic.loadUi('gui/content/ProcessPane.ui')
+            process_pane = uic.loadUi('YSN_gui/content/ProcessPane.ui')
         else:
             for i in range(self.info_stack.count()):
                 if self.info_stack.tabText(i) == process.settings['name']:
                     process_pane = self.info_stack.widget(i)
                     break
                 else:
-                    process_pane = uic.loadUi('gui/content/ProcessPane.ui')
+                    process_pane = uic.loadUi('YSN_gui/content/ProcessPane.ui')
         # Update widget
         process_pane.name.setText(process.settings['name'])
         if not process.ynabAPI.accounts:
@@ -56,7 +53,7 @@ class App(QMainWindow):
         process_pane.tabWidget.clear()
         accounts = process.settings['ynab_budget']['accounts']
         for account in accounts:
-            info_pane = uic.loadUi('gui/content/InfoPane.ui')
+            info_pane = uic.loadUi('YSN_gui/content/InfoPane.ui')
             info_pane.ynabAccount_name.setText(account['name'])
             info_pane.sbankAccount_name.setText(account['account_name'])
             # Fetching account info from process
@@ -74,7 +71,7 @@ class App(QMainWindow):
                 settings_pane = self.settings_stack.widget(i)
                 break
             else:
-                settings_pane = uic.loadUi('gui/content/SettingsPane.ui')
+                settings_pane = uic.loadUi('YSN_gui/content/SettingsPane.ui')
         settings_pane.settings_name.setText(process.settings['name'])
         settings_pane.settings_sbanken_customerid.setText(process.settings['sbanken_customerid'])
         settings_pane.settings_sbanken_clientid.setText(process.settings['sbanken_clientid'])
@@ -92,7 +89,7 @@ class App(QMainWindow):
             process.ynabAPI.list_accounts()
         accounts = process.settings['ynab_budget']['accounts']
         for account in accounts:
-            linkedAccount_tab = uic.loadUi('gui/content/linkedAccount_tab.ui')
+            linkedAccount_tab = uic.loadUi('YSN_gui/content/linkedAccount_tab.ui')
             linkedAccount_tab.id.setText(account['id'])
             linkedAccount_tab.name.setText(account['name'])
             linkedAccount_tab.account_linked.setText(account['account_linked'])
@@ -100,7 +97,7 @@ class App(QMainWindow):
             linkedAccount_tab.to.setText(account['to'])
             linkedAccount_tab.remove.hide()
             settings_pane.settings_accountlink.addTab(linkedAccount_tab, account['name'])
-        settings_pane.status_icon.setPixmap(QPixmap("gui/icons/green_dot.png"))
+        settings_pane.status_icon.setPixmap(QPixmap("YSN_gui/icons/green_dot.png"))
         settings_pane.status.setText('Running')
         settings_pane.process_stop.clicked.connect(lambda: self.stopThread(process.settings['name']))
         settings_pane.process_start.clicked.connect(lambda: self.newThread(process.settings))
@@ -152,10 +149,10 @@ class App(QMainWindow):
                 return
         # Create new process
         process_Obj = sync.Process(settings)
-        process_Obj.running.connect(self.showProcessWidgets)
-        process_Obj.running.connect(self.showSettingsWidgets)
-        process_Obj.message.connect(self.update_statusBar)
-        process_Obj.timerUpdate.connect(self.update_timer)
+        #process_Obj.running.connect(self.showProcessWidgets)
+        #process_Obj.running.connect(self.showSettingsWidgets)
+        #process_Obj.message.connect(self.update_statusBar)
+        #process_Obj.timerUpdate.connect(self.update_timer)
         self.thread_objects.append(process_Obj)
         process_Obj.start()
     def stopThread(self, process_name):

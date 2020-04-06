@@ -10,6 +10,8 @@ class Process(threading.Thread):
         threading.Thread.__init__(self)
         self.daemon = True
 
+        self.logger.debug('YSN_base >sync | Initializing')
+
         self.timer = 0
         self.settings = settings
         self.transactions = {}

@@ -4,10 +4,12 @@ from requests_oauthlib import OAuth2Session
 import urllib.parse
 from YSN_base import ynab
 
-logger = logging.getLogger('YNAB_Sync')
 
 class API:
+    logger = logging.getLogger('YNAB_Sync')
+
     def __init__(self, customerid, clientid, secret):
+        self.logger.debug('YSN_base >sbanken | Initializing')
         self.credential_checkResult = False
         self.credential_check(customerid, clientid, secret)
         if self.credential_checkResult == False:
